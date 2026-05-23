@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Social — Atrae. Conecta. Vende.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════ */
+:root {
+  --blue:   #1E1ED4;
+  --green:  #17C55E;
+  --yellow: #EEE519;
+  --black:  #080808;
+  --off:    #0d0d0d;
+  --d1:     #111111;
+  --d2:     #1a1a1a;
+  --d3:     #252525;
+  --border: #2a2a2a;
+  --gray:   #666666;
+  --muted:  #999999;
+  --light:  #cccccc;
+  --white:  #ffffff;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 32px;
+}
+
+/* ══════════════════════════════════════════
+   RESET
+══════════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: default;
+}
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+
+/* ══════════════════════════════════════════
+   CURSOR
+══════════════════════════════════════════ */
+.cursor {
+  width: 12px; height: 12px;
+  background: var(--green);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease, width 0.2s, height 0.2s, background 0.2s;
+  mix-blend-mode: difference;
+}
+.cursor.hover { width: 36px; height: 36px; background: var(--yellow); }
+
+/* ══════════════════════════════════════════
+   NAV
+══════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 0 48px;
+  height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(8,8,8,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid var(--border);
+  transition: background 0.3s;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+}
+.nav-logo svg { width: 36px; height: 36px; }
+.nav-logo-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px; font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+.nav-logo-text span { color: var(--green); }
+.nav-links {
+  display: flex; align-items: center; gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 13.5px; font-weight: 500;
+  color: var(--muted);
+  transition: color 0.2s;
+  letter-spacing: 0.2px;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  background: var(--green);
+  color: var(--black) !important;
+  font-weight: 700 !important;
+  padding: 10px 22px;
+  border-radius: 100px;
+  font-size: 13px !important;
+  transition: transform 0.2s, background 0.2s !important;
+}
+.nav-cta:hover { background: var(--yellow) !important; transform: scale(0.97); color: var(--black) !important; }
+
+/* ══════════════════════════════════════════
+   HERO
+══════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  padding: 120px 48px 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* grid bg */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.35;
+  mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%);
+}
+/* glow blobs */
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(30,30,212,0.18) 0%, transparent 70%);
+  top: -100px; right: -100px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.blob-green {
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(23,197,94,0.12) 0%, transparent 70%);
+  bottom: -100px; left: -80px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-left { position: relative; z-index: 2; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--d1);
+  border: 0.5px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 14px 6px 6px;
+  margin-bottom: 32px;
+}
+.badge-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%,100%{box-shadow: 0 0 8px var(--green);}
+  50%{box-shadow: 0 0 18px var(--green);}
+}
+.badge-text {
+  font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: 0.5px;
+}
+
+.hero-headline {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(44px, 5.5vw, 72px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -2.5px;
+  margin-bottom: 24px;
+}
+.hero-headline .line-green { color: var(--green); }
+.hero-headline .line-yellow { color: var(--yellow); }
+
+.hero-desc {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 440px;
+  margin-bottom: 40px;
+}
+
+.hero-actions {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.btn-primary {
+  background: var(--green);
+  color: var(--black);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700; font-size: 14px;
+  padding: 14px 32px;
+  border-radius: 100px;
+  border: none; cursor: pointer;
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 0 0 0 rgba(23,197,94,0.4);
+}
+.btn-primary:hover {
+  background: var(--yellow);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(23,197,94,0.3);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600; font-size: 14px;
+  padding: 14px 32px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-secondary:hover { border-color: var(--green); color: var(--green); }
+
+.hero-stats {
+  display: flex; gap: 32px; margin-top: 52px; padding-top: 32px;
+  border-top: 0.5px solid var(--border);
+}
+.hstat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px; font-weight: 800;
+  color: var(--white);
+  line-height: 1;
+}
+.hstat-label { font-size: 12px; color: var(--gray); margin-top: 3px; }
+
+/* ── HERO RIGHT: mockup ── */
+.hero-right {
+  position: relative; z-index: 2;
+  display: flex; justify-content: center; align-items: center;
+}
+.phone-mockup {
+  width: 280px;
+  background: var(--d1);
+  border: 1px solid var(--border);
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 4px #111,
+    0 0 0 5px var(--border),
+    0 40px 80px rgba(0,0,0,0.6),
+    0 0 60px rgba(30,30,212,0.15);
+  animation: float 4s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-14px);}
+}
+.phone-screen {
+  background: var(--black);
+  padding: 20px 16px;
+  min-height: 440px;
+}
+.phone-feed-item {
+  background: var(--d2);
+  border-radius: var(--r-md);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.pfi-img {
+  height: 130px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  position: relative;
+}
+.pfi-img.bg-blue { background: var(--blue); }
+.pfi-img.bg-green { background: var(--green); }
+.pfi-img.bg-yellow { background: var(--yellow); }
+.pfi-body { padding: 10px 12px; }
+.pfi-name { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; color:var(--muted); }
+.pfi-text { font-size:9px; color:var(--light); margin-top:2px; line-height:1.4; }
+.pfi-likes { font-size:9px; color:var(--green); margin-top:6px; font-weight:600; }
+
+/* floating cards */
+.float-card {
+  position: absolute;
+  background: var(--d1);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+.fc-1 { top: 20px; left: -70px; animation: float 3.5s 0.5s ease-in-out infinite; }
+.fc-2 { bottom: 60px; right: -60px; animation: float 4.5s 1s ease-in-out infinite; }
+.fc-num { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; }
+.fc-label { font-size:10px; color:var(--gray); }
+
+/* ══════════════════════════════════════════
+   MARQUEE
+══════════════════════════════════════════ */
+.marquee-section {
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+  background: var(--d1);
+  padding: 16px 0;
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex;
+  gap: 40px;
+  animation: marquee 18s linear infinite;
+  width: max-content;
+}
+.marquee-track:hover { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-item {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--gray); white-space: nowrap;
+  transition: color 0.2s;
+}
+.marquee-item:hover { color: var(--white); }
+.marquee-dot { width:5px; height:5px; border-radius:50%; }
+
+/* ══════════════════════════════════════════
+   SERVICES
+══════════════════════════════════════════ */
+.section {
+  padding: 100px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-label {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--green); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::before {
+  content: '';
+  width: 24px; height: 2px; background: var(--green); border-radius: 2px;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -1.5px;
+  margin-bottom: 14px;
+}
+.section-title .accent { color: var(--green); }
+.section-sub {
+  font-size: 15px; color: var(--muted); line-height: 1.7;
+  max-width: 520px; margin-bottom: 60px;
+}
+
+/* service cards */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.svc-card {
+  background: var(--d1);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  group: true;
+}
+.svc-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--accent-color, var(--green));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.svc-card:hover { transform: translateY(-6px); border-color: var(--accent-color, var(--green)); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+.svc-card:hover::before { transform: scaleX(1); }
+.svc-card.blue { --accent-color: var(--blue); }
+.svc-card.green { --accent-color: var(--green); }
+.svc-card.yellow { --accent-color: var(--yellow); }
+
+.svc-icon {
+  width: 52px; height: 52px;
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+  position: relative;
+}
+.svc-icon.blue { background: rgba(30,30,212,0.15); }
+.svc-icon.green { background: rgba(23,197,94,0.12); }
+.svc-icon.yellow { background: rgba(238,229,25,0.12); }
+
+.svc-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px; font-weight: 800;
+  margin-bottom: 10px; letter-spacing: -0.3px;
+}
+.svc-desc { font-size: 13.5px; color: var(--muted); line-height: 1.65; margin-bottom: 24px; }
+.svc-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800;
+  margin-bottom: 4px;
+}
+.svc-price-note { font-size: 11px; color: var(--gray); }
+.svc-arrow {
+  position: absolute; bottom: 28px; right: 28px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.svc-card:hover .svc-arrow {
+  background: var(--accent-color, var(--green));
+  border-color: var(--accent-color, var(--green));
+  transform: rotate(45deg);
+}
+.svc-arrow svg { width:14px; height:14px; stroke:var(--white); fill:none; stroke-width:2; }
+.svc-card:hover .svc-arrow svg { stroke: var(--black); }
+.svc-features {
+  list-style: none; display: flex; flex-direction: column; gap: 7px; margin-bottom: 28px;
+}
+.svc-features li {
+  font-size: 12.5px; color: var(--muted);
+  display: flex; align-items: center; gap: 8px;
+}
+.svc-features li::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent-color, var(--green)); flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════
+   PROCESS
+══════════════════════════════════════════ */
+.process-section {
+  background: var(--off);
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+}
+.process-grid {
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 0;
+}
+.process-step {
+  padding: 40px 28px;
+  border-right: 0.5px solid var(--border);
+  position: relative;
+  transition: background 0.3s;
+}
+.process-step:last-child { border-right: none; }
+.process-step:hover { background: var(--d1); }
+.step-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px; font-weight: 700;
+  color: var(--gray); letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+.step-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 16px;
+}
+.step-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px; font-weight: 700; margin-bottom: 8px;
+}
+.step-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* connector arrow */
+.process-step::after {
+  content: '→';
+  position: absolute; right: -12px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px; color: var(--border);
+  z-index: 1;
+}
+.process-step:last-child::after { display: none; }
+
+/* ══════════════════════════════════════════
+   ABOUT / WHY
+══════════════════════════════════════════ */
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+.about-visual {
+  position: relative;
+}
+.about-card-main {
+  background: var(--blue);
+  border-radius: var(--r-xl);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.about-card-main::before {
+  content: '';
+  position: absolute; right: -40px; top: -40px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.acm-tagline {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px; font-weight: 800;
+  line-height: 1.1; letter-spacing: -0.5px;
+  margin-bottom: 24px;
+}
+.acm-tagline em { font-style: normal; color: var(--yellow); }
+
+.reasons-list { display: flex; flex-direction: column; gap: 10px; }
+.reason-item {
+  background: rgba(255,255,255,0.07);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  border: 0.5px solid rgba(255,255,255,0.08);
+  transition: background 0.2s;
+}
+.reason-item:hover { background: rgba(255,255,255,0.12); }
+.ri-icon { font-size: 18px; }
+.ri-text { font-size: 13px; font-weight: 500; }
+
+.about-float-badge {
+  position: absolute; bottom: -20px; right: -20px;
+  background: var(--green);
+  color: var(--black);
+  border-radius: var(--r-md);
+  padding: 16px 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.afb-num { font-family:'Syne',sans-serif; font-size:26px; font-weight:800; }
+.afb-label { font-size:11px; font-weight:600; }
+
+.about-right {}
+.pillars { display: flex; flex-direction: column; gap: 20px; }
+.pillar {
+  display: flex; gap: 20px; align-items: flex-start;
+  padding: 20px;
+  border-radius: var(--r-md);
+  border: 0.5px solid transparent;
+  transition: border-color 0.3s, background 0.3s;
+}
+.pillar:hover { border-color: var(--border); background: var(--d1); }
+.pillar-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px; font-weight: 700;
+  color: var(--green); letter-spacing: 2px; flex-shrink: 0; margin-top: 2px;
+}
+.pillar-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px; font-weight: 700; margin-bottom: 6px;
+}
+.pillar-desc { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+
+/* ══════════════════════════════════════════
+   PRICING
+══════════════════════════════════════════ */
+.pricing-section { background: var(--off); border-top: 0.5px solid var(--border); }
+
+.pricing-tabs {
+  display: flex; gap: 8px; margin-bottom: 48px;
+  background: var(--d1);
+  border: 0.5px solid var(--border);
+  border-radius: 100px;
+  padding: 6px;
+  width: fit-content;
+}
+.ptab {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px; font-weight: 600;
+  padding: 9px 24px;
+  border-radius: 100px;
+  cursor: pointer;
+  color: var(--muted);
+  transition: color 0.2s, background 0.2s;
+  border: none; background: transparent;
+}
+.ptab.active { background: var(--white); color: var(--black); }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+}
+.price-card {
+  background: var(--d1);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 32px;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.price-card:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(0,0,0,0.4); }
+.price-card.featured {
+  border-color: var(--green);
+  background: linear-gradient(160deg, rgba(23,197,94,0.08) 0%, var(--d1) 60%);
+}
+.pc-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--green);
+  color: var(--black);
+  font-family: 'Syne', sans-serif;
+  font-size: 10px; font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 100px;
+  letter-spacing: 1px; text-transform: uppercase;
+  white-space: nowrap;
+}
+.pc-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px; font-weight: 700;
+  color: var(--muted); margin-bottom: 4px;
+}
+.pc-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 44px; font-weight: 800;
+  letter-spacing: -2px; line-height: 1;
+  margin-bottom: 4px;
+}
+.pc-price sup { font-size: 22px; vertical-align: super; letter-spacing: 0; }
+.pc-period { font-size: 12px; color: var(--gray); margin-bottom: 20px; }
+.pc-divider { height: 0.5px; background: var(--border); margin: 20px 0; }
+.pc-features { list-style:none; display:flex; flex-direction:column; gap:10px; margin-bottom:28px; }
+.pc-features li {
+  font-size: 13px; color: var(--light);
+  display: flex; align-items: center; gap: 10px;
+}
+.pc-features li .chk { color: var(--green); font-size: 12px; font-weight: 700; flex-shrink:0; }
+.pc-features li .x { color: var(--gray); font-size: 12px; font-weight: 700; flex-shrink:0; }
+.pc-btn {
+  width: 100%; padding: 14px;
+  border-radius: 100px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; border: none;
+  transition: transform 0.2s, background 0.2s;
+}
+.pc-btn:hover { transform: scale(0.97); }
+.pc-btn.outline { background: transparent; color: var(--white); border: 1px solid var(--border); }
+.pc-btn.outline:hover { border-color: var(--green); color: var(--green); }
+.pc-btn.filled { background: var(--green); color: var(--black); }
+.pc-btn.filled:hover { background: var(--yellow); }
+
+/* ══════════════════════════════════════════
+   TESTIMONIALS
+══════════════════════════════════════════ */
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+}
+.testi-card {
+  background: var(--d1);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 28px;
+  transition: transform 0.3s;
+}
+.testi-card:hover { transform: translateY(-4px); }
+.tc-stars { color: var(--yellow); font-size: 14px; margin-bottom: 14px; }
+.tc-quote { font-size: 14px; color: var(--light); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+.tc-author { display:flex; align-items:center; gap:10px; }
+.tc-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.tc-name { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; }
+.tc-role { font-size:11px; color:var(--gray); }
+
+/* ══════════════════════════════════════════
+   CTA SECTION
+══════════════════════════════════════════ */
+.cta-section {
+  background: var(--blue);
+  position: relative;
+  overflow: hidden;
+  padding: 100px 48px;
+  text-align: center;
+}
+.cta-section::before {
+  content: '';
+  position: absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  width: 800px; height: 400px;
+  background: radial-gradient(ellipse, rgba(255,255,255,0.06) 0%, transparent 70%);
+}
+.cta-section::after {
+  content: '';
+  position: absolute; right:-100px; top:-100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: rgba(238,229,25,0.08);
+}
+.cta-inner { position: relative; z-index: 1; }
+.cta-label { font-size:12px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:16px; }
+.cta-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800; letter-spacing: -2px;
+  line-height: 1; margin-bottom: 20px;
+}
+.cta-title .y { color: var(--yellow); }
+.cta-sub { font-size:16px; color:rgba(255,255,255,0.65); margin-bottom:40px; }
+.cta-buttons { display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+.btn-white {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700; font-size: 14px;
+  padding: 14px 32px; border-radius: 100px;
+  border: none; cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-white:hover { background: var(--yellow); transform: scale(0.97); }
+.btn-outline-white {
+  background: transparent;
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-weight: 600; font-size: 14px;
+  padding: 14px 32px; border-radius: 100px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.btn-outline-white:hover { border-color: var(--white); }
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer {
+  background: var(--off);
+  border-top: 0.5px solid var(--border);
+  padding: 60px 48px 32px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+.footer-brand-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800;
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.footer-brand-name svg { width: 28px; height: 28px; }
+.footer-desc { font-size: 13px; color: var(--gray); line-height: 1.7; margin-bottom: 20px; max-width: 260px; }
+.footer-socials { display:flex; gap:10px; }
+.social-btn {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: var(--d2);
+  border: 0.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  transition: background 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+.social-btn:hover { background: var(--green); border-color: var(--green); }
+.footer-col-title {
+  font-family:'Syne',sans-serif; font-size:12px; font-weight:700;
+  letter-spacing: 2px; text-transform:uppercase;
+  color: var(--muted); margin-bottom: 18px;
+}
+.footer-links { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.footer-links a { font-size:13px; color:var(--gray); transition:color 0.2s; }
+.footer-links a:hover { color:var(--white); }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 24px;
+  border-top: 0.5px solid var(--border);
+}
+.footer-bottom-text { font-size:12px; color:var(--gray); }
+.color-bar {
+  display: flex; gap: 4px;
+}
+.cb-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+
+/* ══════════════════════════════════════════
+   SCROLL ANIMATIONS
+══════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ══════════════════════════════════════════
+   LOGO SVG HELPER
+══════════════════════════════════════════ */
+.ns-logo-svg {}
+
+/* responsive basics */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display:none; }
+  .services-grid { grid-template-columns: 1fr; }
+  .process-grid { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  nav { padding: 0 20px; }
+  .nav-links { display:none; }
+  .section { padding: 60px 20px; }
+  .hero { padding: 100px 20px 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+
+<!-- ══ NAV ══════════════════════════════ -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 36 36" fill="none">
+      <rect x="10" y="2" width="11" height="17" rx="5.5" fill="#1E1ED4"/>
+      <rect x="10" y="18" width="11" height="17" rx="5.5" fill="#17C55E"/>
+      <rect x="2" y="14" width="32" height="9" rx="4" fill="white" transform="rotate(-7 2 14)"/>
+    </svg>
+    <div class="nav-logo-text">Nova<span>Social</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#proceso">Proceso</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#precios">Precios</a></li>
+    <li><a href="#contacto" class="nav-cta">Hablar con nosotros</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ═════════════════════════════ -->
+<section class="hero">
+  <div class="blob-green"></div>
+
+  <div class="hero-left">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      <span class="badge-text">Agencia disponible para nuevos proyectos</span>
+    </div>
+
+    <h1 class="hero-headline">
+      Tu marca<br>
+      <span class="line-green">merece</span><br>
+      <span class="line-yellow">crecer.</span>
+    </h1>
+
+    <p class="hero-desc">
+      Diseñamos, gestionamos y escalamos tu presencia digital.
+      Branding, sitios web y redes sociales que <strong>convierten</strong>.
+    </p>
+
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">
+        Empezar ahora
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <button class="btn-secondary" onclick="document.getElementById('servicios').scrollIntoView({behavior:'smooth'})">
+        Ver servicios
+      </button>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-num">150+</div>
+        <div class="hstat-label">Proyectos entregados</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">+320%</div>
+        <div class="hstat-label">Crecimiento promedio</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-num">5★</div>
+        <div class="hstat-label">Valoración clientes</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- Float cards -->
+    <div class="float-card fc-1">
+      <div class="fc-num" style="color:var(--green)">+89%</div>
+      <div class="fc-label">Engagement</div>
+    </div>
+    <div class="float-card fc-2">
+      <div class="fc-num" style="color:var(--yellow)">3.2k</div>
+      <div class="fc-label">Nuevos followers</div>
+    </div>
+
+    <!-- Phone -->
+    <div class="phone-mockup">
+      <div style="background:var(--d2);padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:0.5px solid var(--border);">
+        <svg width="18" height="18" viewBox="0 0 36 36" fill="none"><rect x="10" y="2" width="11" height="17" rx="5.5" fill="#1E1ED4"/><rect x="10" y="18" width="11" height="17" rx="5.5" fill="#17C55E"/><rect x="2" y="14" width="32" height="9" rx="4" fill="white" transform="rotate(-7 2 14)"/></svg>
+        <span style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--light);">noovasocial</span>
+        <span style="font-size:9px;color:var(--gray);margin-left:auto;">190 followers</span>
+      </div>
+      <div class="phone-screen">
+        <div class="phone-feed-item">
+          <div class="pfi-img bg-blue">
+            <svg width="50" height="50" viewBox="0 0 36 36" fill="none"><rect x="10" y="2" width="11" height="17" rx="5.5" fill="white" opacity="0.9"/><rect x="10" y="18" width="11" height="17" rx="5.5" fill="#17C55E"/><rect x="2" y="14" width="32" height="9" rx="4" fill="white" transform="rotate(-7 2 14)" opacity="0.5"/></svg>
+          </div>
+          <div class="pfi-body">
+            <div class="pfi-name">@noovasocial</div>
+            <div class="pfi-text">Tu marca, tu historia. Diseño que conecta y vende.</div>
+            <div class="pfi-likes">❤️ 847 likes</div>
+          </div>
+        </div>
+        <div class="phone-feed-item">
+          <div class="pfi-img bg-green" style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#080808;flex-direction:column;gap:2px;">
+            <span>Atrae.</span><span>Conecta.</span><span>Vende.</span>
+          </div>
+          <div class="pfi-body">
+            <div class="pfi-name">@noovasocial</div>
+            <div class="pfi-text">¿Lista tu marca para el siguiente nivel?</div>
+            <div class="pfi-likes">❤️ 1.2k likes</div>
+          </div>
+        </div>
+        <div class="phone-feed-item">
+          <div class="pfi-img bg-yellow" style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:#080808;">
+            🚀 +320% reach
+          </div>
+          <div class="pfi-body">
+            <div class="pfi-name">@noovasocial</div>
+            <div class="pfi-text">Resultados reales para nuestros clientes.</div>
+            <div class="pfi-likes">❤️ 2.1k likes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARQUEE ════════════════════════════ -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--green)"></div>Branding</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--blue)"></div>Paginas Web</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--yellow)"></div>Redes Sociales</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--green)"></div>Identidad Visual</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--blue)"></div>E-Commerce</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--yellow)"></div>Contenido</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--green)"></div>Estrategia Digital</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--blue)"></div>SEO</div>
+    <!-- duplicate for seamless loop -->
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--green)"></div>Branding</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--blue)"></div>Paginas Web</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--yellow)"></div>Redes Sociales</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--green)"></div>Identidad Visual</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--blue)"></div>E-Commerce</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--yellow)"></div>Contenido</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--green)"></div>Estrategia Digital</div>
+    <div class="marquee-item"><div class="marquee-dot" style="background:var(--blue)"></div>SEO</div>
+  </div>
+</div>
+
+<!-- ══ SERVICES ══════════════════════════ -->
+<section id="servicios">
+  <div class="section">
+    <div class="section-label reveal">Servicios</div>
+    <h2 class="section-title reveal reveal-delay-1">Todo lo que tu<br>marca <span class="accent">necesita.</span></h2>
+    <p class="section-sub reveal reveal-delay-2">Diseñamos cada pieza de tu presencia digital para que trabaje en conjunto, genere confianza y convierta visitantes en clientes.</p>
+
+    <div class="services-grid">
+
+      <div class="svc-card blue reveal reveal-delay-1">
+        <div class="svc-icon blue">🌐</div>
+        <div class="svc-name">Pagina Web</div>
+        <div class="svc-desc">Tu sitio web es tu vendedor #1. Diseñamos experiencias web modernas, rápidas y optimizadas para convertir.</div>
+        <ul class="svc-features">
+          <li>Diseño responsive y moderno</li>
+          <li>Optimización SEO</li>
+          <li>Velocidad máxima</li>
+          <li>Panel de administración</li>
+        </ul>
+        <div class="svc-price" style="color:var(--blue)">Desde $499</div>
+        <div class="svc-price-note">USD · pago único</div>
+        <div class="svc-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+
+      <div class="svc-card green reveal reveal-delay-2">
+        <div class="svc-icon green">✦</div>
+        <div class="svc-name">Branding</div>
+        <div class="svc-desc">Tu marca es lo primero que ven — y lo que recuerdan. Creamos identidades visuales que enamoran.</div>
+        <ul class="svc-features">
+          <li>Logo + variantes</li>
+          <li>Paleta y tipografía</li>
+          <li>Manual de marca</li>
+          <li>Papelería corporativa</li>
+        </ul>
+        <div class="svc-price" style="color:var(--green)">Desde $349</div>
+        <div class="svc-price-note">USD · pago único</div>
+        <div class="svc-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+
+      <div class="svc-card yellow reveal reveal-delay-3">
+        <div class="svc-icon yellow">📈</div>
+        <div class="svc-name">Redes Sociales</div>
+        <div class="svc-desc">Gestionamos tus redes con estrategia, contenido de calidad y una comunidad activa que compra.</div>
+        <ul class="svc-features">
+          <li>Contenido diario</li>
+          <li>Diseño gráfico incluido</li>
+          <li>Gestión de comunidad</li>
+          <li>Reportes mensuales</li>
+        </ul>
+        <div class="svc-price" style="color:var(--yellow)">Desde $299</div>
+        <div class="svc-price-note">USD · mensual</div>
+        <div class="svc-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROCESS ════════════════════════════ -->
+<section id="proceso" class="process-section">
+  <div class="section" style="max-width:100%;padding-left:0;padding-right:0;">
+    <div style="padding:0 48px 48px;">
+      <div class="section-label reveal">Proceso</div>
+      <h2 class="section-title reveal reveal-delay-1">Cómo <span class="accent">trabajamos.</span></h2>
+    </div>
+    <div class="process-grid">
+      <div class="process-step reveal">
+        <div class="step-num">01</div>
+        <div class="step-icon" style="background:rgba(30,30,212,0.15)">🤝</div>
+        <div class="step-title">Reunión inicial</div>
+        <div class="step-desc">Entendemos tu negocio, objetivos y competencia a fondo.</div>
+      </div>
+      <div class="process-step reveal reveal-delay-1">
+        <div class="step-num">02</div>
+        <div class="step-icon" style="background:rgba(23,197,94,0.12)">🗺️</div>
+        <div class="step-title">Estrategia</div>
+        <div class="step-desc">Diseñamos el plan y ruta de trabajo personalizada para tu marca.</div>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="step-num">03</div>
+        <div class="step-icon" style="background:rgba(238,229,25,0.12)">🎨</div>
+        <div class="step-title">Producción</div>
+        <div class="step-desc">Creamos todo el contenido y diseño con atención al detalle.</div>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="step-num">04</div>
+        <div class="step-icon" style="background:rgba(30,30,212,0.15)">🔄</div>
+        <div class="step-title">Revisión</div>
+        <div class="step-desc">Ajustamos y perfeccionamos hasta que estés 100% satisfecho.</div>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="step-num">05</div>
+        <div class="step-icon" style="background:rgba(23,197,94,0.12)">🚀</div>
+        <div class="step-title">Lanzamiento</div>
+        <div class="step-desc">Tu marca sale al mundo, lista para atraer y vender.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══════════════════════════════ -->
+<section id="nosotros">
+  <div class="section">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-card-main">
+          <div class="acm-tagline">Atrae. Conecta. <em>Vende.</em></div>
+          <div class="reasons-list">
+            <div class="reason-item"><div class="ri-icon">🎯</div><div class="ri-text">Resultados medibles, no promesas vacías</div></div>
+            <div class="reason-item"><div class="ri-icon">⚡</div><div class="ri-text">Equipo dedicado a tu marca todos los días</div></div>
+            <div class="reason-item"><div class="ri-icon">🔗</div><div class="ri-text">Branding + Web + Redes = coherencia total</div></div>
+            <div class="reason-item"><div class="ri-icon">💬</div><div class="ri-text">Comunicación directa, sin intermediarios</div></div>
+          </div>
+        </div>
+        <div class="about-float-badge">
+          <div class="afb-num">150+</div>
+          <div class="afb-label">Proyectos</div>
+        </div>
+      </div>
+
+      <div class="about-right reveal reveal-delay-2">
+        <div class="section-label">Nosotros</div>
+        <h2 class="section-title" style="margin-bottom:16px;">¿Por qué <span class="accent">Nova Social?</span></h2>
+        <p style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:32px;">Somos una agencia creativa especializada en hacer crecer marcas en el mundo digital. No trabajamos por likes — trabajamos por resultados reales.</p>
+        <div class="pillars">
+          <div class="pillar">
+            <div class="pillar-num">01</div>
+            <div>
+              <div class="pillar-title">Estrategia primero</div>
+              <div class="pillar-desc">Cada decisión creativa tiene un porqué estratégico. El diseño bonito sin estrategia no vende.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-num">02</div>
+            <div>
+              <div class="pillar-title">Creatividad con propósito</div>
+              <div class="pillar-desc">Diseñamos para emocionar y convertir. Cada pixel tiene un objetivo claro.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-num">03</div>
+            <div>
+              <div class="pillar-title">Transparencia total</div>
+              <div class="pillar-desc">Reportes claros, comunicación directa y acceso a tu manager en todo momento.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRICING ════════════════════════════ -->
+<section id="precios" class="pricing-section">
+  <div class="section">
+    <div class="section-label reveal">Precios</div>
+    <h2 class="section-title reveal reveal-delay-1">Planes <span class="accent">transparentes.</span></h2>
+    <p class="section-sub reveal reveal-delay-2">Sin letras pequeñas ni cobros escondidos. Elige el plan que mejor se adapta a tu negocio.</p>
+
+    <div class="pricing-tabs reveal">
+      <button class="ptab active" onclick="switchTab(this,'web')">Pagina Web</button>
+      <button class="ptab" onclick="switchTab(this,'brand')">Branding</button>
+      <button class="ptab" onclick="switchTab(this,'social')">Redes Sociales</button>
+    </div>
+
+    <!-- WEB -->
+    <div class="pricing-grid" id="tab-web">
+      <div class="price-card reveal">
+        <div class="pc-name">Web Esencial</div>
+        <div class="pc-price"><sup>$</sup>499</div>
+        <div class="pc-period">USD · pago único</div>
+        <div class="pc-divider"></div>
+        <ul class="pc-features">
+          <li><span class="chk">✓</span>Hasta 5 páginas</li>
+          <li><span class="chk">✓</span>Diseño responsive</li>
+          <li><span class="chk">✓</span>Formulario de contacto</li>
+          <li><span class="chk">✓</span>SEO básico</li>
+          <li><span class="chk">✓</span>Dominio 1er año</li>
+          <li><span class="x">✗</span>Blog / noticias</li>
+          <li><span class="x">✗</span>E-Commerce</li>
+        </ul>
+        <button class="pc-btn outline">Solicitar</button>
+      </div>
+      <div class="price-card featured reveal reveal-delay-1">
+        <div class="pc-badge">Más popular</div>
+        <div class="pc-name">Web Pro</div>
+        <div class="pc-price"><sup>$</sup>899</div>
+        <div class="pc-period">USD · pago único</div>
+        <div class="pc-divider"></div>
+        <ul class="pc-features">
+          <li><span class="chk">✓</span>Hasta 10 páginas</li>
+          <li><span class="chk">✓</span>Diseño premium a medida</li>
+          <li><span class="chk">✓</span>Blog / noticias</li>
+          <li><span class="chk">✓</span>Chat WhatsApp integrado</li>
+          <li><span class="chk">✓</span>SEO intermedio</li>
+          <li><span class="chk">✓</span>SSL + Analytics</li>
+          <li><span class="chk">✓</span>Soporte 3 meses</li>
+        </ul>
+        <button class="pc-btn filled">Solicitar</button>
+      </div>
+      <div class="price-card reveal reveal-delay-2">
+        <div class="pc-name">E-Commerce</div>
+        <div class="pc-price"><sup>$</sup>1,499</div>
+        <div class="pc-period">USD · pago único</div>
+        <div class="pc-divider"></div>
+        <ul class="pc-features">
+          <li><span class="chk">✓</span>Páginas ilimitadas</li>
+          <li><span class="chk">✓</span>Tienda online completa</li>
+          <li><span class="chk">✓</span>Pasarela de pago</li>
+          <li><span class="chk">✓</span>Gestión de inventario</li>
+          <li><span class="chk">✓</span>SEO avanzado</li>
+          <li><span class="chk">✓</span>Panel de admin</li>
+          <li><span class="chk">✓</span>Soporte 6 meses</li>
+        </ul>
+        <button class="pc-btn outline">Solicitar</button>
+      </div>
+    </div>
+
+    <!-- BRAND (hidden) -->
+    <div class="pricing-grid" id="tab-brand" style="display:none">
+      <div class="price-card reveal">
+        <div class="pc-name">Brand Starter</div>
+        <div class="pc-price"><sup>$</sup>349</div>
+        <div class="pc-period">USD · pago único</div>
+        <div class="pc-divider"></div>
+        <ul class="pc-features">
+          <li><span class="chk">✓</span>Logo + variantes</li>
+          <li><span class="chk">✓</span>Paleta de colores</li>
+          <li><span class="chk">✓</span>Tipografías</li>
+          <li><span class="chk">✓</span>Tarjeta de presentación</li>
+          <li><span class="chk">✓</span>2 revisiones</li>
+          <li><span class="x">✗</span>Manual de marca</li>
+          <li><span class="x">✗</span>Papelería</li>
+        </ul>
+        <button class="pc-btn outline">Solicitar</button>
+      </div>
+      <div class="price-card featured reveal reveal-delay-1">
+        <div class="pc-badge">Más completo</div>
+        <div class="pc-name">Brand Pro</div>
+        <div class="pc-price"><sup>$</sup>749</div>
+        <div class="pc-period">USD · pago único</div>
+        <div class="pc-divider"></div>
+        <ul class="pc-features">
+          <li><span class="chk">✓</span>Todo de Starter</li>
+          <li><span class="chk">✓</span>Manual de marca PDF</li>
+          <li><span class="chk">✓</span>Papelería corporativa</li>
+          <li><span class="chk">✓</span>Plantillas para redes</li>
+          <li><span class="chk">✓</span>Mockups profesionales</li>
+          <li><span class="chk">✓</span>4 revisiones</li>
+          <li><span class="chk">✓</span>Archivos AI/SVG</li>
+        </ul>
+        <button class="pc-btn filled">Solicitar</button>
+      </div>
+      <div class="price-card reveal reveal-delay-2">
+        <div class="pc-name">Brand Premium</div>
+        <div class="pc-price"><sup>$</sup>1,299</div>
+        <div class="pc-period">USD · pago único</div>
+        <div class="pc-divider"></div>
+        <ul class="pc-features">
+          <li><span class="chk">✓</span>Todo de Pro</li>
+          <li><span class="chk">✓</span>Estrategia de marca</li>
+          <li><span class="chk">✓</span>Naming + tagline</li>
+          <li><span class="chk">✓</span>Fotografía editorial</li>
+          <li><span class="chk">✓</span>Animación de logo</li>
+          <li><span class="chk">✓</span>Revisiones ilimitadas</li>
+          <li><span class="chk">✓</span>Soporte post-entrega</li>
+        </ul>
+        <button class="pc-btn outline">Solicitar</button>
+      </div>
+    </div>
+
+    <!-- SOCIAL (hidden) -->
+    <div class="pricing-grid" id="tab-social" style="display:none">
+      <div class="price-card reveal">
+        <div class="pc-name">Plan Starter</div>
+        <div class="pc-price"><sup>$</sup>299</div>
+        <div class="pc-period">USD · por mes</div>
+        <div class="pc-divider"></div>
+        <ul class="pc-features">
+          <li><span class="chk">✓</span>1 red social</li>
+          <li><span class="chk">✓</span>12 posts / mes</li>
+          <li><span class="chk">✓</span>4 stories / semana</li>
+          <li><span class="chk">✓</span>Diseño gráfico</li>
+          <li><span class="chk">✓</span>1 reporte mensual</li>
+          <li><span class="x">✗</span>Reels / videos</li>
+          <li><span class="x">✗</span>Publicidad (ads)</li>
+        </ul>
+        <button class="pc-btn outline">Solicitar</button>
+      </div>
+      <div class="price-card featured reveal reveal-delay-1">
+        <div class="pc-badge">Más elegido</div>
+        <div class="pc-name">Plan Crecimiento</div>
+        <div class="pc-price"><sup>$</sup>549</div>
+        <div class="pc-period">USD · por mes</div>
+        <div class="pc-divider"></div>
+        <ul class="pc-features">
+          <li><span class="chk">✓</span>2 redes sociales</li>
+          <li><span class="chk">✓</span>20 posts / mes</li>
+          <li><span class="chk">✓</span>Stories diarias</li>
+          <li><span class="chk">✓</span>Reels (4/mes)</li>
+          <li><span class="chk">✓</span>Gestión de comunidad</li>
+          <li><span class="chk">✓</span>Reportes semanales</li>
+          <li><span class="chk">✓</span>Ads básicos incluidos</li>
+        </ul>
+        <button class="pc-btn filled">Solicitar</button>
+      </div>
+      <div class="price-card reveal reveal-delay-2">
+        <div class="pc-name">Plan Total</div>
+        <div class="pc-price"><sup>$</sup>999</div>
+        <div class="pc-period">USD · por mes</div>
+        <div class="pc-divider"></div>
+        <ul class="pc-features">
+          <li><span class="chk">✓</span>Múltiples redes</li>
+          <li><span class="chk">✓</span>Posts ilimitados</li>
+          <li><span class="chk">✓</span>Reels diarios</li>
+          <li><span class="chk">✓</span>Campañas de ads</li>
+          <li><span class="chk">✓</span>Sesión fotos/mes</li>
+          <li><span class="chk">✓</span>Reportes en tiempo real</li>
+          <li><span class="chk">✓</span>Manager dedicado</li>
+        </ul>
+        <button class="pc-btn outline">Solicitar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ════════════════════════ -->
+<section>
+  <div class="section">
+    <div class="section-label reveal">Testimonios</div>
+    <h2 class="section-title reveal reveal-delay-1">Nuestros clientes<br><span class="accent">hablan.</span></h2>
+    <p class="section-sub reveal reveal-delay-2">No solo te lo decimos nosotros — los resultados hablan solos.</p>
+
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-quote">"En 3 meses multiplicamos nuestros seguidores por 5 y las ventas por 2. Nova Social transformó nuestra presencia digital completamente."</p>
+        <div class="tc-author">
+          <div class="tc-avatar" style="background:var(--blue)">👩</div>
+          <div>
+            <div class="tc-name">María González</div>
+            <div class="tc-role">CEO · Boutique Bella</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-quote">"El branding que hicieron para mi restaurante es exactamente lo que imaginé pero nunca pude describir. Profesionales, rápidos y con ojo para los detalles."</p>
+        <div class="tc-author">
+          <div class="tc-avatar" style="background:var(--green)">👨</div>
+          <div>
+            <div class="tc-name">Carlos Herrera</div>
+            <div class="tc-role">Fundador · Sabor & Co.</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-quote">"Mi sitio web convierte el doble desde que lo rediseñaron. La inversión se pagó sola en el primer mes. Los recomiendo sin dudar."</p>
+        <div class="tc-author">
+          <div class="tc-avatar" style="background:var(--yellow)">👩</div>
+          <div>
+            <div class="tc-name">Ana Rodríguez</div>
+            <div class="tc-role">Directora · Clínica Vital</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ════════════════════════════════ -->
+<section id="contacto" class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-label">¿Listo para empezar?</div>
+    <h2 class="cta-title">Llevemos tu marca<br>al <span class="y">siguiente nivel.</span></h2>
+    <p class="cta-sub">Escríbenos hoy y recibe una propuesta personalizada sin costo.</p>
+    <div class="cta-buttons">
+      <button class="btn-white">
+        💬 WhatsApp
+      </button>
+      <button class="btn-outline-white">
+        📧 Enviar email
+      </button>
+    </div>
+    <p style="margin-top:28px;font-size:12px;color:rgba(255,255,255,0.4);">
+      @noovasocial &nbsp;·&nbsp; hola@novasocial.com &nbsp;·&nbsp; Respuesta en menos de 24 hrs
+    </p>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">
+        <svg viewBox="0 0 28 28" fill="none">
+          <rect x="8" y="1" width="8" height="13" rx="4" fill="#1E1ED4"/>
+          <rect x="8" y="13" width="8" height="13" rx="4" fill="#17C55E"/>
+          <rect x="1" y="10" width="26" height="7" rx="3" fill="white" transform="rotate(-7 1 10)"/>
+        </svg>
+        Nova<span style="color:var(--green)">Social</span>
+      </div>
+      <p class="footer-desc">Agencia de branding y marketing digital. Transformamos marcas en experiencias digitales que generan resultados reales.</p>
+      <div class="footer-socials">
+        <div class="social-btn">📷</div>
+        <div class="social-btn">🐦</div>
+        <div class="social-btn">💼</div>
+        <div class="social-btn">🎵</div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Servicios</div>
+      <ul class="footer-links">
+        <li><a href="#">Pagina Web</a></li>
+        <li><a href="#">Branding</a></li>
+        <li><a href="#">Redes Sociales</a></li>
+        <li><a href="#">E-Commerce</a></li>
+        <li><a href="#">Contenido</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Empresa</div>
+      <ul class="footer-links">
+        <li><a href="#">Nosotros</a></li>
+        <li><a href="#">Proceso</a></li>
+        <li><a href="#">Portfolio</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contacto</div>
+      <ul class="footer-links">
+        <li><a href="#">@noovasocial</a></li>
+        <li><a href="#">hola@novasocial.com</a></li>
+        <li><a href="#">+1 (555) 000-0000</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-bottom-text">© 2025 Nova Social. Todos los derechos reservados.</div>
+    <div class="color-bar">
+      <div class="cb-dot" style="background:var(--blue)"></div>
+      <div class="cb-dot" style="background:var(--green)"></div>
+      <div class="cb-dot" style="background:var(--yellow)"></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Cursor ──
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.transform = `translate(${e.clientX - 6}px, ${e.clientY - 6}px)`;
+});
+document.querySelectorAll('button, a, .svc-card, .price-card, .testi-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+});
+
+// ── Scroll reveal ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// ── Pricing tabs ──
+function switchTab(btn, tab) {
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  ['web','brand','social'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = t===tab ? 'grid' : 'none';
+  });
+}
+
+// ── Nav scroll effect ──
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.background =
+    window.scrollY > 50 ? 'rgba(8,8,8,0.98)' : 'rgba(8,8,8,0.85)';
+});
+</script>
+</body>
+</html>
